@@ -6453,6 +6453,55 @@ PERFORMANCE OF THIS SOFTWARE.
         }));
         mapActive.hidden = false;
     }
+    if (document.querySelector("#formImage")) {
+        const formImage = document.getElementById("formImage");
+        const formPreview = document.getElementById("formPreview");
+        formImage.addEventListener("change", (() => {
+            uploadFile(formImage.files[0]);
+        }));
+        function uploadFile(file) {
+            if (![ "image/jpeg", "image/png", "image/gif" ].includes(file.type)) {
+                alert("Разрешены только изображения.");
+                formImage.value = "";
+                return;
+            }
+            if (file.size > 2 * 1024 * 1024) {
+                alert("Файл должен быть менее 2 МБ.");
+                return;
+            }
+            var reader = new FileReader;
+            reader.onload = function(e) {
+                formPreview.innerHTML = `<img src="${e.target.result}" alt="Фото">`;
+            };
+            reader.onerror = function(e) {
+                alert("Ошибка");
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+    if (document.querySelector(".file-screen")) {
+        const formImage = document.querySelectorAll(".formScreen");
+        document.querySelectorAll(".file-screen__result");
+        formImage.forEach((img => {
+            img.addEventListener("change", (() => {
+                document.querySelector(".screen_active") ? document.querySelector(".screen_active").classList.remove("screen_active") : null;
+                uploadScreen(img.files[0]);
+                img.classList.add("screen_active");
+                if (window.matchMedia("(min-width: 479.98px)").matches) document.querySelector(".screen_active").nextElementSibling.innerHTML = "Скриншот загружен";
+            }));
+        }));
+        function uploadScreen(file) {
+            if (![ "image/jpeg", "image/png", "image/gif" ].includes(file.type)) {
+                alert("Разрешены только изображения.");
+                formImage.value = "";
+                return;
+            }
+            if (file.size > 2 * 1024 * 1024) {
+                alert("Файл должен быть менее 2 МБ.");
+                return;
+            }
+        }
+    }
     window["FLS"] = false;
     isWebp();
     menuInit();
